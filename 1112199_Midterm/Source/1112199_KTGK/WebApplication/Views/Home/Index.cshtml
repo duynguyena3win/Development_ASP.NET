@@ -1,0 +1,209 @@
+﻿@model WebApplication.Models.LoginModel
+@{
+    ViewBag.Title = "My Todo List";
+}
+@functions{
+    public string GetAntiForgeryToken()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;                
+    }
+}
+<div id="main-content" ng-app="AppProjects" ng-controller="ProjectsController">
+    @if (@User.Identity.IsAuthenticated)
+    {
+        <div style="width: 800px; float: left;">
+            <div class="back" ng-click="LoadAllProject('@User.Identity.Name')">
+                <div class="button_base b03_skewed_slide_in">
+                    <div>Load Projects</div>
+                    <div></div>
+                    <div>Load Projects</div>
+                </div>
+            </div>
+            <div class="back" data-toggle="modal" data-target=".bs-example-modal-lg">
+                <div class="button_base b03_skewed_slide_in">
+                    <div>Create Project</div>
+                    <div></div>
+                    <div>Create Project</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-left:20px;">
+            <div class="col-xs-7 col-md-5" ng-repeat="pro in projects" style="margin-bottom: 10px; margin-top: 10px;">
+                <div class="card">
+                    <div class="description">
+                        <h3><a href="">{{pro.name}}</a></h3>
+                        <button id="{{'button_' + pro.pid}}" ng-click="addTime(pro.pid)" data="{{pro.pid}}" class="myButton">
+                            Start
+                        </button>
+                        <p>{{pro.description}}.</p>
+                        <button type="button" ng-click="LoadProject(pro.pid)" data="{{pro.pid}}" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Edit</button>
+                        <button type="button" ng-click="deleteProject('@User.Identity.Name',pro.pid)" data="{{pro.pid}}" class="btn btn-primary">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="modal fade" tabindex="-1" id="myModal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h3 class="modal-title" id="myModalLabel">Edit Project</h3>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label for="name">Name Project</label>
+                                </td>
+                                <td>
+                                    <input class="form-control" name="id" type="text" value="{{selectProject.name}}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="time">Total Time</label>
+                                </td>
+                                <td>
+                                    <input class="form-control" name="name" type="number" ng-model="selectProject.totalJob" value="{{selectProject.totalJob}}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="des">Description</label>
+                                </td>
+                                <td>
+                                    <input class="form-control" name="des" type="text" ng-model="selectProject.description" value="{{selectProject.description}}" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Time of Project work</h4>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label for="begin">Time Begin</label>
+                                </td>
+                                <td>
+                                    <label for="end">Time End</label>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="time in allTimes">
+                                <td>
+                                    <input class="form-control" name="id" type="datetime" value="{{time.begin}}" ng-model="time.begin" />
+                                </td>
+                                <td>
+                                    <input class="form-control" name="id" type="datetime" value="{{time.end}}" ng-model="time.end" />
+                                </td>
+                                <td>
+                                    <button ng-click="RemoveTime(time.lid)" data="{{time.lid}}" class="btn btn-primary">
+                                        X
+                                    </button>
+                                    <button ng-click="editTime(time)" id="saveButton" class="btn btn-primary">
+                                        Save Time
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+                    <a class="btn btn-default" href="" data-dismiss="modal">
+                        Close
+                    </a>
+                    <a class="btn btn-primary" href="" ng-click="editProject(selectProject)">
+                        <span class="glyphicon glyphicon-plus"></span> Save
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div id="insert-student" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add New Project</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label for="id">Project Id</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="id" type="text" readonly value="Student id will be automatic initialized." />
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="id" type="hidden" value="0" ng-model="addProject.id" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="name">Name Project</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="name" type="text" ng-model="addProject.name" value="{{addProject.name}}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="gpa">Description</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="des" type="text" ng-model="addProject.description" value="{{addProject.description}}" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span ng-show="errorMessage!=''" class="glyphicon glyphicon-minus-sign" style="color:#d9534f; font-size:1.2em;">
+                        </span>
+                        {{errorMessage}}
+                    </div>
+                    <div class="modal-footer">
+                        @*<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+                        <a class="btn btn-default" href="" data-dismiss="modal">
+                            Close
+                        </a>
+                        <a class="btn btn-primary" href="" ng-click="insertProject('@User.Identity.Name',addProject)">
+                            <span class="glyphicon glyphicon-plus"></span> Add new
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="todoList" id="loginPanel">
+            <section id="localLoginPanel">
+                <h2>Log in</h2>
+                @Html.Partial("_Login")
+            </section>
+            <section id="socialLoginPanel">
+                <h2>Log in using another service</h2>
+                @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
+            </section>
+            <p>First time here? <a id="showRegister">Sign up</a></p>
+        </div>
+        <div class="todoList" id="registerPanel">
+            <h2>Sign up</h2>
+            @Html.Partial("_Register")
+            <p>Already signed up? <a id="showLogin">Log in</a></p>
+        </div>
+    }
+</div>
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @section scripts {
+        @Scripts.Render("~/bundles/knockout")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/todo")
+    }
+}

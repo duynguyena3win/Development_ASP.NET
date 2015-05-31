@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <script type="text/javascript" src="~/Scripts/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="~/Scripts/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/angular.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/Scripts/app/Project-Controller.js"></script>
+    <link href="~/Content/css_main.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="window-margin">
+        <div id="banner_wrapper">
+            <img src="~/Images/Background.png" />
+        </div>
+        <div class="window">
+
+            <aside class="sidebar">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <p class="fa fa-search"></p>
+                </div>
+
+                <menu class="menu">
+                </menu>
+            </aside>
+
+            <div class="main" role="main">
+                <div class="top-bar">
+                    <ul class="top-menu">
+                        <li class="menu-icon trigger-sidebar-toggle">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </li>
+                        <li ng-click="">@Html.ActionLink("Dashboard", "Index", "Home", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("Report", "Report", "Home", new { area = "" }, null)</li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Archivos</a></li>
+                    </ul>
+
+                    <div class="profile-box">
+                        <div class="circle">
+                        </div>
+                        <div class="boxUser">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <text>
+                                    @Html.ActionLink(User.Identity.Name, "Manage", "Account", routeValues: new { area = "" }, htmlAttributes: new { @class = "username", title = "Manage" })
+                                </text>
+                            }
+                        </div>
+                        <span class="arrow">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <text>
+                                @using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                                        <img src="~/Images/logout.png" />
+                                    </a>
+                                }
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    <a id="showRegister">Sign Up</a>
+                                </text>
+                            }
+</span>
+                    </div>
+
+                </div> <!-- top bar -->
+                @RenderBody()
+            </div> <!-- main -->
+        </div> <!-- window -->
+    </div>
+    @Scripts.Render("~/Scripts/app/jsStyle.js")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/ajaxlogin")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Report";
+}
+
+<h2>Report</h2>
+
+<script type="text/javascript" ng-controller="ProjectsController" ng-app="AppProjects">
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004', 1000, 400],
+          ['2005', 1170, 460],
+          ['2006', 660, 1120],
+          ['2007', 1030, 540]
+        ]);
+
+        var options = {
+            title: 'Company Performance',
+            hAxis: { title: 'Year', titleTextStyle: { color: 'red' } }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+    }
+
+</script>
+
+<div ng-controller="ProjectsController" ng-app="AppProjects">
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div" style="width:400; height:300">
+
+    </div>
+</div>
