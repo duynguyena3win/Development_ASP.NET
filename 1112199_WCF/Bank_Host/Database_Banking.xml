@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<BANKS>
+  <ACCOUNT IdAccount="0041242312" Pin="123456" Name="Nguyễn Duy Nguyên" DateEnd="02/12/2015" IdCard="1112199" Funds="300000" />
+  <ACCOUNT IdAccount="0041355555" Pin="11111" Name="Nguyễn Đăng Khoa" DateEnd="10/05/2015" IdCard="1112145" Funds="2000000" />
+  <ACCOUNT IdAccount="0041232112" Pin="11211" Name="Nguyễn Vĩnh Nghi" DateEnd="12/02/2015" IdCard="1112195" Funds="5000000" />
+</BANKS>
