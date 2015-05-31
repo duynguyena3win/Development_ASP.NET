@@ -1,0 +1,54 @@
+﻿<header>
+    <h2>
+        Student
+    </h2>
+</header>
+<div>
+    <div>
+        <h3>
+            List Students
+        </h3>
+        <div id="student-list">
+        </div>
+    </div>
+    <div>
+        <h3>
+            Create Student
+        </h3>
+        <p>
+            Contact Name: @Html.TextBox("MSSV")
+        </p>
+        <p>
+            Phone Number: @Html.TextBox("Name")
+        </p>
+        <p>
+            Email: @Html.TextBox("Score")
+        </p>
+        <div>
+            <input type="button" value="Save" id="saveButton" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var StudentsApi = {
+        getStudents: function () {
+            debugger;
+            $.getJSON("http://localhost:3457/api/student/",
+                                function (data) {
+                                    // On success, 'data' contains a list of products.
+                                    $('#student-list').html('');
+                                    $.each(data, function (key, val) {
+
+                                        // Format the text to display.
+                                        var str = '<a href="#" onclick="javascript:StudentsApi.viewContact(\'' + val.MSSV + '\')">' + val.Name + '</a>'
+                                            + ' - ' + val.Score
+                                            + '<a href="#" onclick="javascript:StudentsApi.deleteContact(\'' + val.MSSV + '\')">Delete</a>';
+
+                                        // Add a list item for the product.
+                                        $('<div/>', { html: str })
+                                            .appendTo($('#student-list'));
+                                    });
+                                });
+        }
+    };
+</script>

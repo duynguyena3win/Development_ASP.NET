@@ -1,0 +1,133 @@
+﻿<header>
+    <h2>
+        Student
+    </h2>
+</header>
+<div>
+    <div>
+        <h3>
+            List Students
+        </h3>
+        <div id="student-list">
+        </div>
+    </div>
+    <div>
+        <h3>
+            Create Student
+        </h3>
+        <p>
+            Contact Name: @Html.TextBox("MSSV")
+        </p>
+        <p>
+            Phone Number: @Html.TextBox("Name")
+        </p>
+        <p>
+            Email: @Html.TextBox("Score")
+        </p>
+        <div>
+            <input type="button" value="Save" id="saveButton" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var StudentsApi = {
+        //        getContacts: function () {
+        //            $('#student-list').html('');
+        //            $.getJSON("/api/student/",
+        //                function (data) {
+        //                    $.each(data, function (key, val) {
+        //                        var str = val.Name + ' - ' + val.Email;
+
+        //                        $('<div/>', { html: str })
+        //                            .appendTo($('#student-list'));
+        //                    });
+        //                });
+        //        },
+        getStudents: function () {
+            $.getJSON("/api/student/",
+                                function (data) {
+                                    // On success, 'data' contains a list of products.
+                                    $('#student-list').html('');
+                                    $.each(data, function (key, val) {
+
+                                        // Format the text to display.
+                                        var str = '<a href="#" onclick="javascript:StudentsApi.viewContact(\'' + val.MSSV + '\')">' + val.Name + '</a>'
+                                            + ' - ' + val.Score
+                                            + '<a href="#" onclick="javascript:StudentsApi.deleteContact(\'' + val.MSSV + '\')">Delete</a>';
+
+                                        // Add a list item for the product.
+                                        $('<div/>', { html: str })
+                                            .appendTo($('#student-list'));
+                                    });
+                                });
+        },
+
+        createContact: function (name, mssv, score) {
+            $.post("/api/student", { Name: name, MSSV: phone, Score: score },
+                            function (data) {
+                                StudentsApi.getContacts();
+                            }).error(function () { alert("error"); });
+
+            //            $.ajax({
+            //                type: 'POST',
+            //                url: "/api/contacts",
+            //                data: { Name: name, Phone: phone, Email: email },
+            //                sucess: function () {
+            //                },
+            //                statusCode: {
+            //                    404: function () {
+            //                        alert('page not found');
+            //                    },
+            //                    201: function () {
+            //                        StudentsApi.getContacts();
+            //                    }
+            //                }
+            //            });
+        },
+
+        //deleteContact: function (id) {
+        //    $.ajax({
+        //        type: 'DELETE',
+        //        url: "/api/student/" + id,
+        //        statusCode: {
+        //            204: function () {
+        //                StudentsApi.getContacts();
+        //            }
+        //        }
+        //    });
+        //},
+        //viewContact: function (id) {
+        //    //Get the contact by id, and  
+        //    $.getJSON("/api/student/" + id,
+        //        function (data) {
+        //            // On success, 'data' contains a list of products.
+        //            $('#Name').val(data.Name);
+        //            $('#PhoneNumber').val(data.Phone);
+        //            $('#Email').val(data.Email);
+        //            StudentsApi.currentContactId = data.Id;
+        //        });
+        //},
+        //updateContact: function () {
+
+        //    var name = $('#Name').val();
+        //    var phone = $('#Phone').val();
+        //    var email = $('#Email').val();
+
+        //    $.ajax({
+        //        type: 'PUT',
+        //        url: "/api/student/" + StudentsApi.currentContactId,
+        //        data: { Name: name, Phone: phone, Email: email },
+        //        statusCode: {
+        //            404: function () {
+        //                alert('page not found');
+        //            },
+        //            200: function () {
+        //                StudentsApi.getContacts();
+        //                StudentsApi.currentContactId = -1;
+        //            }
+        //        }
+        //    });
+        //},
+        currentContactId: -1
+    };
+</script>
